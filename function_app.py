@@ -5,7 +5,7 @@ import fitz
 import json
 import time
 
-app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
+app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
 MAX_FILE_SIZE_MB = 10
 MAX_PAGES = 200
