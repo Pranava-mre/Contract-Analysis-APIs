@@ -25,7 +25,7 @@ def health(req: func.HttpRequest) -> func.HttpResponse:
         mimetype="application/json"
     )
 
-@app.route(route="extract-text", methods=["POST"], auth_level=func.AuthLevel.FUNCTION)
+@app.route(route="extract-text", methods=["POST"], auth_level=func.AuthLevel.ANONYMOUS)
 def extract_text(req: func.HttpRequest) -> func.HttpResponse:
     start_time = time.time()
 
