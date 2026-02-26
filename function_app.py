@@ -18,6 +18,7 @@ def health(req: func.HttpRequest) -> func.HttpResponse:
         "message": "Function app is running",
         "timestamp_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     }
+    
     return func.HttpResponse(
         json.dumps(response_body),
         status_code=200,
@@ -29,7 +30,10 @@ def extract_text(req: func.HttpRequest) -> func.HttpResponse:
     start_time = time.time()
 
     try:
-        body = req.get_json()
+        try:
+            body = req.get_json()
+        except ValueError:
+            return func.HttpResponse("Invalid JSON body", status_code=400)
         file_name = body.get("file_name")
         base64_string = body.get("file_content")
 
@@ -74,6 +78,7 @@ def extract_text(req: func.HttpRequest) -> func.HttpResponse:
             "processing_time_ms": elapsed_ms,
             "text": extracted_text
         }
+        logging.info(f"Processed {file_name}, pages={len(text_list)}, time_ms={elapsed_ms}")
 
         return func.HttpResponse(
             json.dumps(response_body),
