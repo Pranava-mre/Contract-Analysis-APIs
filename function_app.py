@@ -10,7 +10,21 @@ app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
 MAX_FILE_SIZE_MB = 10
 MAX_PAGES = 200
 
-@app.route(route="extract-text", methods=["POST"])
+
+@app.route(route="health", methods=["GET"], auth_level=func.AuthLevel.ANONYMOUS)
+def health(req: func.HttpRequest) -> func.HttpResponse:
+    response_body = {
+        "status": "ok",
+        "message": "Function app is running",
+        "timestamp_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    }
+    return func.HttpResponse(
+        json.dumps(response_body),
+        status_code=200,
+        mimetype="application/json"
+    )
+
+@app.route(route="extract-text", methods=["POST"], auth_level=func.AuthLevel.FUNCTION)
 def extract_text(req: func.HttpRequest) -> func.HttpResponse:
     start_time = time.time()
 
